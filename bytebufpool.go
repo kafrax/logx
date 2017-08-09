@@ -5,7 +5,7 @@ import (
 	"io"
 	"unsafe"
 )
-
+//pool 4 bytesbuffer
 type bytesBuffer struct {
 	B []byte
 }
