@@ -4,7 +4,7 @@ import (
 	"os"
 	"syscall"
 	"fmt"
-	"path"
+	"path/filepath"
 )
 
 func openFile(name string, do func()) error {
@@ -64,7 +64,8 @@ func pathIsExist(path string) bool {
 	return false
 }
 
-func createLinkFile(filename, linkname string) {
-	os.Remove(filename)
-	os.Symlink(path.Base(filename), linkname)
+func createLinkFile(path, filename, linkname string) {
+	os.Remove(filepath.Join(path, linkname))
+	os.Symlink(filepath.Join(path, filename), filepath.Join(path, linkname))
+
 }

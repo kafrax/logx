@@ -20,4 +20,5 @@ type Logger struct {
 	bucketLen      int
 	lock           sync.RWMutex
 	out            io.Writer //out is file os.Stdout or kafaka
+	//queue          chan *bytesBuffer
 }
