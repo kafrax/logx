@@ -18,7 +18,7 @@ var maxSize int = 256 * 1024 * 1024 //256mb
 
 var bucketLen int = 1024
 
-var fileName string = "kafrax-logx"
+var fileName string = "logx"
 
 var filePath string = getCurrentDirectory()
 

@@ -6,7 +6,7 @@ import (
 )
 
 func poller() {
-	atomic.SwapUint32(&uint32(logger.look), uint32(coreRunning))
+	atomic.SwapUint32(&logger.look, uint32(coreRunning))
 
 	if err := logger.loadCurLogFile(); err != nil {
 		if err = logger.createFile(); err != nil {
@@ -15,6 +15,7 @@ func poller() {
 	}
 
 	go logger.signalHandler()
+
 	ticker := time.NewTicker(time.Millisecond * 500)
 	now := time.Now()
 	next := now.Add(time.Hour * 24)
@@ -29,6 +30,10 @@ func poller() {
 
 	for {
 		select {
+		case <-logger.closeSignal:
+			ticker.Stop()
+			tickerPoll.Stop()
+
 		case <-ticker.C:
 			if logger.fileWriter.Buffered() > 0 {
 				logger.sync()
@@ -36,6 +41,7 @@ func poller() {
 
 		case n := <-logger.bucket:
 			logger.fileWriter.Write(n.Bytes())
+			logger.fileWriter.Write(s2b("\n"))
 			logger.fileActualSize += n.Len()
 
 			logger.lock.Lock()

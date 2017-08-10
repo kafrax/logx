@@ -21,28 +21,29 @@ import (
 var logger *Logger
 
 func init() {
-	newLogger()
+	chaos()
 	go poller()
 }
 
-func newLogger() *Logger {
+func chaos() {
+	y, m, d := time.Now().Date()
 	if logger == nil {
-		return &Logger{
-			look:        coreDead,
-			link:        fileName + ".log",
+		logger = &Logger{
+			look:        uint32(coreDead),
 			fileName:    fileName,
-			path:        filepath.Join(filePath, fileName, "log"),
-			timestamp:   time.Now().Unix(),
+			path:        filepath.Join(filePath, fileName),
+			timestamp:   y*10000 + int(m)*100 + d*1,
 			fileMaxSize: maxSize,
 			bucket:      make(chan *bytes.Buffer, bucketLen),
+			closeSignal: make(chan string),
 			lock:        &sync.RWMutex{},
 			//output         io.Writer //out is file os.Stdout or kafaka
 		}
 	}
-	return logger
 }
 
 func (l *Logger) loadCurLogFile() error {
+	l.link = filepath.Join(l.path, fileName+".log")
 	actFileName, ok := isLinkFile(l.link)
 	if !ok {
 		return errors.New("is not link file")
@@ -64,8 +65,8 @@ func (l *Logger) loadCurLogFile() error {
 		fmt.Errorf("loadCurrentLogFile |err=%v", err)
 		return err
 	}
-
-	l.timestamp = t.Unix()
+	y, m, d := t.Date()
+	l.timestamp = y*10000 + int(m)*100 + d*1
 	l.file = f
 	l.fileActualSize = int(info.Size())
 	l.fileWriter = bufio.NewWriterSize(f, l.fileMaxSize)
@@ -82,7 +83,9 @@ func (l *Logger) createFile() (err error) {
 
 	now := time.Now()
 
-	l.timestamp = now.Unix()
+	y, m, d := now.Date()
+
+	l.timestamp = y*10000 + int(m)*100 + d*1
 	l.fileName = filepath.Join(
 		l.path,
 		filepath.Base(os.Args[0])+"."+now.Format("2006-01-02.15.04.05.000")+".log")
@@ -95,6 +98,7 @@ func (l *Logger) createFile() (err error) {
 	l.file = f
 	l.fileActualSize = 0
 	l.fileWriter = bufio.NewWriterSize(f, l.fileMaxSize)
+	l.link = filepath.Join(l.path, fileName+".log")
 	return createLinkFile(l.fileName, l.link)
 }
 
@@ -105,7 +109,13 @@ func (l *Logger) sync() {
 }
 
 func (l *Logger) rotate(do func()) bool {
-	if l.fileActualSize <= l.fileMaxSize {
+	if !l.lookRunning() {
+		return false
+	}
+
+	y, m, d := time.Now().Date()
+	timestamp := y*10000 + int(m)*100 + d*1
+	if l.fileActualSize <= l.fileMaxSize || timestamp < l.timestamp {
 		return false
 	}
 	do()
@@ -119,21 +129,21 @@ func (l *Logger) rotate(do func()) bool {
 }
 
 func (l *Logger) lookRunning() bool {
-	if atomic.LoadUint32(&uint32(l.look)) == uint32(coreRunning) {
+	if atomic.LoadUint32(&l.look) == uint32(coreRunning) {
 		return true
 	}
 	return false
 }
 
 func (l *Logger) lookDead() bool {
-	if atomic.LoadUint32(&uint32(l.look)) == uint32(coreDead) {
+	if atomic.LoadUint32(&l.look) == uint32(coreDead) {
 		return true
 	}
 	return false
 }
 
 func (l *Logger) lookBlock() bool {
-	if atomic.LoadUint32(&uint32(l.look)) == uint32(coreBlock) {
+	if atomic.LoadUint32(&l.look) == uint32(coreBlock) {
 		return true
 	}
 	return false
@@ -146,10 +156,11 @@ func (l *Logger) signalHandler() {
 	for {
 		select {
 		case sig := <-sigChan:
+			l.closeSignal <- "close"
 			fmt.Println("receive os signal is ", sig)
 			l.fileWriter.Flush()
 			closeFile(l.file)
-			atomic.SwapUint32(&uint32(l.look), uint32(coreDead))
+			atomic.SwapUint32(&l.look, uint32(coreDead))
 			close(l.bucket)
 			os.Exit(syscall.SYS_EXIT)
 		}
@@ -161,23 +172,27 @@ func (l *Logger) release(buf *bytes.Buffer) {
 }
 
 func caller() string {
-	pc := make([]uintptr, 3, 3)
-	cnt := runtime.Callers(6, pc)
-
-	for i := 0; i < cnt; i++ {
-		fu := runtime.FuncForPC(pc[i] - 1)
-		name := fu.Name()
-
-		if !strings.Contains(name, "github.com/kafrax/logx") {
-			f, l := fu.FileLine(pc[i] - 1)
-			return path.Base(f) + "|" + path.Base(name) + "|" + strconv.Itoa(l)
-		}
-
-		if pc, f, l, ok := runtime.Caller(8); ok {
-			funcName := runtime.FuncForPC(pc).Name()
-			return path.Base(f) + "|" + path.Base(funcName) + "|" + strconv.Itoa(l)
-		}
+	if pc, f, l, ok := runtime.Caller(2); ok {
+		funcName := runtime.FuncForPC(pc).Name()
+		return path.Base(f) + "|" + path.Base(funcName) + "|" + strconv.Itoa(l)
 	}
+	//pc := make([]uintptr, 3, 3)
+	//cnt := runtime.Callers(6, pc)
+	//
+	//for i := 0; i < cnt; i++ {
+	//	fu := runtime.FuncForPC(pc[i] - 1)
+	//	name := fu.Name()
+	//
+	//	if !strings.Contains(name, "github.com/kafrax/logx") {
+	//		f, l := fu.FileLine(pc[i] - 1)
+	//		return path.Base(f) + "|" + path.Base(name) + "|" + strconv.Itoa(l)
+	//	}
+	//
+	//	if pc, f, l, ok := runtime.Caller(8); ok {
+	//		funcName := runtime.FuncForPC(pc).Name()
+	//		return path.Base(f) + "|" + path.Base(funcName) + "|" + strconv.Itoa(l)
+	//	}
+	//}
 	return ""
 }
 
@@ -186,8 +201,9 @@ func Debugf(format, msg string) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "] " + "[" + caller() + "] "))
+	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
+
 	logger.bucket <- buf
 }
 
@@ -196,7 +212,7 @@ func Infof(format, msg string) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "] " + "[" + caller() + "] "))
+	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
 }
@@ -206,7 +222,7 @@ func Warnf(format, msg string) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "] " + "[" + caller() + "] "))
+	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
 }
@@ -216,17 +232,17 @@ func Errorf(format, msg string) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "] " + "[" + caller() + "] "))
+	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
 }
 
-func Disaster(format, msg string) {
+func Fatalf(format, msg string) {
 	if levelFlag > _DISASTER {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[DISA][" + time.Now().Format("01-02.15.04.05.000") + "] " + "[" + caller() + "] "))
+	buf.Write(s2b("[DISA][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
 }
