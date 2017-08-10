@@ -1,5 +1,6 @@
 package logx
 
-func wathc(){
+func watch(){
 
 }
+

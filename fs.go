@@ -5,18 +5,17 @@ import (
 	"syscall"
 	"fmt"
 	"path/filepath"
+	"strings"
 )
 
-func openFile(name string, do func()) error {
-	file, err := os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_APPEND, os.ModePerm)
+func openFile(name string) (file *os.File, err error) {
+	file, err = os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_APPEND, os.ModePerm)
 	if err != nil {
-		return err
+		return
 	}
 	syscall.Syscall(syscall.O_SYNC, file.Fd(), 0, 0)
 
-	do()
-
-	return err
+	return
 }
 
 func closeFile(file *os.File) {
@@ -25,7 +24,7 @@ func closeFile(file *os.File) {
 	}
 }
 
-func IsLinkFile(filename string) (name string, ok bool) {
+func isLinkFile(filename string) (name string, ok bool) {
 	fi, err := os.Lstat(filename)
 	if err != nil {
 		return
@@ -64,8 +63,28 @@ func pathIsExist(path string) bool {
 	return false
 }
 
-func createLinkFile(path, filename, linkname string) {
-	os.Remove(filepath.Join(path, linkname))
-	os.Symlink(filepath.Join(path, filename), filepath.Join(path, linkname))
+func createLinkFile(filename, linkName string) error {
+	os.Remove(linkName)
+	return os.Symlink(filepath.Base(filename), linkName)
+}
 
+func substr(s string, pos, length int) string {
+	runes := []rune(s)
+	l := pos + length
+	if l > len(runes) {
+		l = len(runes)
+	}
+	return string(runes[pos:l])
+}
+
+func getParentDirectory(dirctory string) string {
+	return substr(dirctory, 0, strings.LastIndex(dirctory, "/"))
+}
+
+func getCurrentDirectory() string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Dir(ex)
 }
