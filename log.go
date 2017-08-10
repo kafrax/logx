@@ -242,7 +242,7 @@ func Fatalf(format, msg string) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[DISA][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
 }
