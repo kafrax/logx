@@ -2,57 +2,58 @@ package logx
 
 import (
 	"sync"
-	"io"
 	"unsafe"
+	"io"
+	"bytes"
 )
 
-//pool 4 bytesbuffer
-type bytesBuffer struct {
+//pool for logMessage logMsg
+type logMsg struct {
 	B []byte
 }
 
 //no bb
-var bbFree = sync.Pool{
-	New: func() interface{} { return new(bytesBuffer) },
+var logMsgFree = sync.Pool{
+	New: func() interface{} { return new(logMsg) },
 }
 
-func (b *bytesBuffer) WriteTo(w io.Writer) (int64, error) {
+func (b *logMsg) WriteTo(w io.Writer) (int64, error) {
 	n, err := w.Write(b.B)
 	return int64(n), err
 }
 
-func (b *bytesBuffer) Bytes() []byte {
+func (b *logMsg) Bytes() []byte {
 	return b.B
 }
 
-func (b *bytesBuffer) Write(p []byte) (int, error) {
+func (b *logMsg) Write(p []byte) (int, error) {
 	b.B = append(b.B, p...)
 	return len(p), nil
 }
 
-func (b *bytesBuffer) WriteByte(c byte) error {
+func (b *logMsg) WriteByte(c byte) error {
 	b.B = append(b.B, c)
 	return nil
 }
 
-func (b *bytesBuffer) WriteString(s string) (int, error) {
+func (b *logMsg) WriteString(s string) (int, error) {
 	b.B = append(b.B, s...)
 	return len(s), nil
 }
 
-func (b *bytesBuffer) Set(p []byte) {
+func (b *logMsg) Set(p []byte) {
 	b.B = append(b.B[:0], p...)
 }
 
-func (b *bytesBuffer) SetString(s string) {
+func (b *logMsg) SetString(s string) {
 	b.B = append(b.B[:0], s...)
 }
 
-func (b *bytesBuffer) String() string {
+func (b *logMsg) String() string {
 	return b2s(b.B)
 }
 
-func (b *bytesBuffer) Reset() {
+func (b *logMsg) Reset() {
 	b.B = b.B[:0]
 }
 
@@ -62,4 +63,22 @@ func s2b(s string) []byte {
 
 func b2s(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
+}
+
+//pool for stitching log data¬
+var bpFree = sync.Pool{}
+
+func bufferPoolGet() *bytes.Buffer {
+	if buf := bpFree.Get(); buf != nil {
+		return buf.(*bytes.Buffer)
+	} else {
+		return &bytes.Buffer{}
+	}
+}
+
+func put(b *bytes.Buffer) { bpFree.Put(b) }
+
+func bufferPoolFree(b *bytes.Buffer) {
+	b.Reset()
+	put(b)
 }

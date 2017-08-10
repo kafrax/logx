@@ -7,7 +7,7 @@ import (
 type coreStatus uint32
 
 var (
-	coreDead    coreStatus = -1 //logger is dead
+	coreDead    coreStatus = 2 //logger is dead
 	coreBlock   coreStatus = 0  //logger is block
 	coreRunning coreStatus = 1  //logger is running
 )
@@ -22,12 +22,14 @@ var fileName string = "kafrax-logx"
 
 var filePath string = getCurrentDirectory()
 
-type level uint
+type level uint8
 
 const (
-	debug    level = iota
-	info
-	warn
-	err
-	disaster
+	_DEBUG    level = iota
+	_INFO
+	_WARN
+	_ERR
+	_DISASTER
 )
+
+var levelFlag level = _DEBUG

@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"sync"
 	"io"
+	"bytes"
 )
 
 type Logger struct {
@@ -17,16 +18,9 @@ type Logger struct {
 	timestamp      int64
 	fileMaxSize    int
 	fileActualSize int
-	bucket         chan *bytesBuffer
+	bucket         chan *bytes.Buffer
 	bucketFlushLen int
 	lock           *sync.RWMutex
 	output         io.Writer //out is file os.Stdout or kafaka
 	//queue          chan *bytesBuffer
-}
-
-type logMsg struct {
-
-	timestamp string
-	msg       string
-	level     uint8
 }
