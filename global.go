@@ -1,9 +1,5 @@
 package logx
 
-import (
-	"os"
-)
-
 type coreStatus uint32
 
 var (
