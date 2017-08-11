@@ -1,5 +1,5 @@
 {
-  "llevel":"debug",
+  "llevel":4,
   "lmaxsize":102400,
   "lout":"stdout",
   "lbucketlen":1024,

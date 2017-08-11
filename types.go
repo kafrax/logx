@@ -27,7 +27,7 @@ type Logger struct {
 }
 
 type config struct {
-	Llevel          string `json:"llevel"`
+	Llevel          uint8 `json:"llevel"`
 	Lmaxsize        int    `json:"lmaxsize"`
 	Lout            string `json:"lout"`
 	Lbucketlen      int    `json:"lbucketlen"`

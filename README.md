@@ -31,7 +31,7 @@ func main(){
 - if there is not config.json,where execute default for logx.
 ```
 {
-    "llevel":"debug",  //log level
+    "llevel":1,         //log level,1debug,2info,3warn,4error,5fatal
     "lmaxsize":102400  //bit
     "lout":"stdout",   //file|stdout
     "lbucketlen":1024, //memory cache size

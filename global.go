@@ -28,7 +28,7 @@ var pollerinterval = 500
 type level uint8
 
 const (
-	_DEBUG level = iota
+	_DEBUG    level = iota+1
 	_INFO
 	_WARN
 	_ERR
@@ -63,8 +63,8 @@ func loadConfig() {
 		filePath = x
 	}
 
-	if x := config.Llevel; x != "" {
-		levelFlag = x
+	if x := config.Llevel; x !=0 {
+		levelFlag = level(x)
 	}
 
 	if x := config.Lmaxsize; x != 0 {
