@@ -1,2 +1,2 @@
-#support windows
-#support send to kafka hook
+# support windows
+# support send to kafka hook
