@@ -212,7 +212,7 @@ func print(buf *bytes.Buffer) {
 	}
 }
 
-func Debugf(format, msg string) {
+func Debugf(format string, msg interface{}) {
 	if levelFlag > _DEBUG {
 		return
 	}
@@ -222,7 +222,7 @@ func Debugf(format, msg string) {
 	print(buf)
 }
 
-func Infof(format, msg string) {
+func Infof(format string,msg interface{}) {
 	if levelFlag > _INFO {
 		return
 	}
@@ -232,7 +232,7 @@ func Infof(format, msg string) {
 	print(buf)
 }
 
-func Warnf(format, msg string) {
+func Warnf(format string,msg interface{}) {
 	if levelFlag > _WARN {
 		return
 	}
@@ -242,7 +242,7 @@ func Warnf(format, msg string) {
 	print(buf)
 }
 
-func Errorf(format, msg string) {
+func Errorf(format string,msg interface{}) {
 	if levelFlag > _ERR {
 		return
 	}
@@ -252,7 +252,7 @@ func Errorf(format, msg string) {
 	print(buf)
 }
 
-func Fatalf(format, msg string) {
+func Fatalf(format string,msg interface{}) {
 	if levelFlag > _DISASTER {
 		return
 	}
@@ -262,7 +262,7 @@ func Fatalf(format, msg string) {
 	print(buf)
 }
 
-func Stackf(format, msg string) {
+func Stackf(format string,msg interface{}) {
 	s := fmt.Sprintf(format, msg)
 	s += "\n"
 	buf := make([]byte, 1<<20)
