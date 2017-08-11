@@ -2,13 +2,13 @@
  lightweight log tool, dynamic configuration,automatic in write and switch log files
 
  ```
-    go get github.com/kafrax/logx
+  go get github.com/kafrax/logx
  ```
 
 # tps
 ```
-    	//OutPut
-    	//tps is : 703401/s
+ //OutPut
+ //tps is : 703401/s
 ```
 
 # simple to use
@@ -17,11 +17,13 @@ package main
 
 import (
     "fmt"
-	"github.com/kafrax/logx"
+    "github.com/kafrax/logx"
 )
 
 func main(){
     logx.Debugf("module=test |message=%s","logx is a lightweight log to use")
+    //must give time for logx poller
+    //in your project it is not necessary
     var str string
     fmt.Scan(&str)
 }
