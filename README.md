@@ -3,7 +3,7 @@
 
 # tps
 ```
- //OutPut
+ //OutPut write to file
  //tps is : 703401/s
 ```
 # simple to use

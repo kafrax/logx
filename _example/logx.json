@@ -1,9 +1,9 @@
 {
-  "llevel":1,
-  "lmaxsize":102400,
-  "lout":"file",
+  "llevel":2,
+  "lmaxsize":10240000,
+  "lout":"stdout",
   "lbucketlen":1024,
   "lfilename":"logx",
-  "lfilepath":"/Users/kafrax/logx/_example",
+  "lfilepath":"./",
   "lpollerinterval":500
 }
