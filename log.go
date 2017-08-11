@@ -1,31 +1,36 @@
 package logx
 
 import (
-	"time"
-	"sync"
-	"os"
-	"errors"
-	"strings"
-	"fmt"
 	"bufio"
-	"path/filepath"
-	"sync/atomic"
-	"os/signal"
-	"syscall"
-	"runtime"
-	"path"
-	"strconv"
 	"bytes"
+	"errors"
+	"fmt"
+	"os"
+	"os/signal"
+	"path"
+	"path/filepath"
+	"runtime"
+	"strconv"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"syscall"
+	"time"
 )
 
 var logger *Logger
 
 func init() {
 	chaos()
-	go poller()
+
+	if out=="file"{
+		go poller()
+	}
 }
 
 func chaos() {
+	loadConfig()
+
 	y, m, d := time.Now().Date()
 	if logger == nil {
 		logger = &Logger{
@@ -37,7 +42,6 @@ func chaos() {
 			bucket:      make(chan *bytes.Buffer, bucketLen),
 			closeSignal: make(chan string),
 			lock:        &sync.RWMutex{},
-			//output         io.Writer //out is file os.Stdout or kafaka
 		}
 	}
 }
@@ -202,6 +206,8 @@ func print(buf *bytes.Buffer) {
 		logger.bucket <- buf
 	case "stdout":
 		fmt.Println(buf.String())
+	case "kafka":
+		//todo send to kafka nsq etc.
 	default:
 		fmt.Println(buf.String())
 	}
@@ -213,7 +219,7 @@ func Debugf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
 
@@ -223,7 +229,7 @@ func Infof(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
 
@@ -233,7 +239,7 @@ func Warnf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
 
@@ -243,7 +249,7 @@ func Errorf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
 
@@ -253,7 +259,7 @@ func Fatalf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
 

@@ -16,7 +16,7 @@ func poller() {
 
 	go logger.signalHandler()
 
-	ticker := time.NewTicker(time.Millisecond * 500)
+	ticker := time.NewTicker(time.Millisecond * time.Duration(pollerinterval))
 	now := time.Now()
 	next := now.Add(time.Hour * 24)
 	next = time.Date(

@@ -1,10 +1,10 @@
 package logx
 
 import (
+	"bytes"
+	"io"
 	"sync"
 	"unsafe"
-	"io"
-	"bytes"
 )
 
 //pool for logMessage logMsg

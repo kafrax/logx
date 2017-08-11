@@ -1,11 +1,11 @@
 package logx
 
 import (
-	"os"
 	"bufio"
-	"sync"
-	"io"
 	"bytes"
+	"io"
+	"os"
+	"sync"
 )
 
 type Logger struct {
@@ -24,4 +24,14 @@ type Logger struct {
 	output         io.Writer //out is file os.Stdout or kafaka
 	closeSignal    chan string
 	//queue          chan *bytesBuffer
+}
+
+type config struct {
+	Llevel          string `json:"llevel"`
+	Lmaxsize        int    `json:"lmaxsize"`
+	Lout            string `json:"lout"`
+	Lbucketlen      int    `json:"lbucketlen"`
+	Lfilename       string `json:"lfilename"`
+	Lfilepath       string `json:"lfilepath"`
+	Lpollerinterval int    `json:"lpollerinterval"`
 }

@@ -1,17 +1,18 @@
 # logx
- lightweight log tool, dynamic configuration,automatic in write and switch log files
-
- ```
-  go get github.com/kafrax/logx
- ```
+ log tool,easy to use,performance,handy,availability
 
 # tps
 ```
  //OutPut
  //tps is : 703401/s
 ```
-
 # simple to use
+## install
+
+```
+go get github.com/kafrax/logx
+```
+## start
 ```
 package main
 
@@ -25,18 +26,22 @@ func main(){
 
 ```
 
-# write to file
+# config logx
+- let logx.json  or config.json in your project root dir.
+- if there is not config.json,where execute default for logx.
 ```
+{
+    "llevel":"debug",  //log level
+    "lmaxsize":102400  //bit
+    "lout":"stdout",   //file|stdout
+    "lbucketlen":1024, //memory cache size
+    "lfilename":"logx",//log file name eg. logx2006-01-02.04.05.000.log
+    "lfilepath":"./",  //log file path
+    "lpollerinterval": //500 millisecond
+}
 ```
-it will be create dir with ./logx
-
-# feature
- - only write to file
- - at midnight auto do file switch
 
 # future
- - dynamic config
- - os.stdout output
  - data queue send to kafaka
 
 # @me

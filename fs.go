@@ -1,11 +1,11 @@
 package logx
 
 import (
-	"os"
-	"syscall"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 )
 
 func openFile(name string) (file *os.File, err error) {
