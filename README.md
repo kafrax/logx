@@ -24,6 +24,7 @@ func main(){
 }
 
 ```
+it will be create dir with ./logx
 
 # feature
  - only write to file

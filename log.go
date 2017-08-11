@@ -203,7 +203,7 @@ func Debugf(format, msg string) {
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
-
+	Stack()
 	logger.bucket <- buf
 }
 
@@ -245,4 +245,24 @@ func Fatalf(format, msg string) {
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
 	buf.Write(s2b(fmt.Sprintf(format, msg)))
 	logger.bucket <- buf
+}
+
+func Stack(v ...interface{}) {
+	s := fmt.Sprint(v...)
+	s += "\n"
+	buf := make([]byte, 1<<20)
+	n := runtime.Stack(buf, true)
+	s += string(buf[:n])
+	s += "\n"
+	fmt.Println("", "err", 2, s)
+}
+
+func Stackf(format, msg string) {
+	s := fmt.Sprintf(format,msg)
+	s += "\n"
+	buf := make([]byte, 1<<20)
+	n := runtime.Stack(buf, true)
+	s += string(buf[:n])
+	s += "\n"
+	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="+s)
 }
