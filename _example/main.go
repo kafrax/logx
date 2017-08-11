@@ -46,8 +46,11 @@ import (
 //}
 
 func main() {
-	logx.Debugf("test |message=%s", "logx")
-	logx.Infof("test |message=%s","logx")
+	logx.Debugf("test |message=%s", "logx is a lightweight log to use")
+	logx.Infof("test |message=%s","logx is a lightweight log to use")
+	logx.Errorf("test |message=%s","logx is a lightweight log to use")
+	logx.Warnf("test |message=%s","logx is a lightweight log to use")
+	logx.Fatalf("test |message=%s","logx is a lightweight log to use")
 	var str string
 	fmt.Scanln(&str)
 }

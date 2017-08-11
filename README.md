@@ -22,8 +22,19 @@ import (
 )
 
 func main(){
-    logx.Debugf("module=test |message=%s","logx is a lightweight log to use")
+    logx.Debugf("test |message=%s", "logx is a lightweight log to use")
+    logx.Infof("test |message=%s","logx is a lightweight log to use")
+    logx.Errorf("test |message=%s","logx is a lightweight log to use")
+    logx.Warnf("test |message=%s","logx is a lightweight log to use")
+    logx.Fatalf("test |message=%s","logx is a lightweight log to use")
 }
+```
+```
+[DEBU][08-11.16.48.27.297][main.go|main.main|49] message=test |message=logx is a lightweight log to use
+[INFO][08-11.16.48.27.297][main.go|main.main|50] message=test |message=logx is a lightweight log to use
+[ERRO][08-11.16.48.27.297][main.go|main.main|51] message=test |message=logx is a lightweight log to use
+[WARN][08-11.16.48.27.297][main.go|main.main|52] message=test |message=logx is a lightweight log to use
+[FTAL][08-11.16.48.27.297][main.go|main.main|53] message=test |message=logx is a lightweight log to use
 
 ```
 
@@ -31,6 +42,7 @@ func main(){
 ## config logx.json or config.json
 - let logx.json  or config.json in your project root dir.
 - if there is not config.json,where execute default for logx.
+- notice fileWriter use memory cache ,so must have enough time to do poller to save data to log file.
 ```
 {
     "llevel":1,        //log level,1debug,2info,3warn,4error,5fatal
