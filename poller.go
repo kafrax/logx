@@ -41,7 +41,6 @@ func poller() {
 
 		case n := <-logger.bucket:
 			logger.fileWriter.Write(n.Bytes())
-			logger.fileWriter.Write(s2b("\n"))
 			logger.fileActualSize += n.Len()
 
 			logger.lock.Lock()

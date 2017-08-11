@@ -12,7 +12,7 @@ var (
 	coreRunning coreStatus = 1  //logger is running
 )
 
-var out = os.Stdout
+var out = "stdout"
 
 var maxSize int = 256 * 1024 * 1024 //256mb
 

@@ -196,15 +196,25 @@ func caller() string {
 	return ""
 }
 
+func print(buf *bytes.Buffer) {
+	switch out {
+	case "file":
+		logger.bucket <- buf
+	case "stdout":
+		fmt.Println(buf.String())
+	default:
+		fmt.Println(buf.String())
+	}
+}
+
 func Debugf(format, msg string) {
 	if levelFlag > _DEBUG {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)))
-	Stack()
-	logger.bucket <- buf
+	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	print(buf)
 }
 
 func Infof(format, msg string) {
@@ -213,8 +223,8 @@ func Infof(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)))
-	logger.bucket <- buf
+	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	print(buf)
 }
 
 func Warnf(format, msg string) {
@@ -223,8 +233,8 @@ func Warnf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)))
-	logger.bucket <- buf
+	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	print(buf)
 }
 
 func Errorf(format, msg string) {
@@ -233,8 +243,8 @@ func Errorf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)))
-	logger.bucket <- buf
+	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	print(buf)
 }
 
 func Fatalf(format, msg string) {
@@ -243,26 +253,16 @@ func Fatalf(format, msg string) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf(format, msg)))
-	logger.bucket <- buf
-}
-
-func Stack(v ...interface{}) {
-	s := fmt.Sprint(v...)
-	s += "\n"
-	buf := make([]byte, 1<<20)
-	n := runtime.Stack(buf, true)
-	s += string(buf[:n])
-	s += "\n"
-	fmt.Println("", "err", 2, s)
+	buf.Write(s2b(fmt.Sprintf(format, msg)+"\n"))
+	print(buf)
 }
 
 func Stackf(format, msg string) {
-	s := fmt.Sprintf(format,msg)
+	s := fmt.Sprintf(format, msg)
 	s += "\n"
 	buf := make([]byte, 1<<20)
 	n := runtime.Stack(buf, true)
 	s += string(buf[:n])
 	s += "\n"
-	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="+s)
+	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message=" + s)
 }

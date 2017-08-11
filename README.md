@@ -16,18 +16,17 @@
 package main
 
 import (
-    "fmt"
     "github.com/kafrax/logx"
 )
 
 func main(){
     logx.Debugf("module=test |message=%s","logx is a lightweight log to use")
-    //must give time for logx poller
-    //in your project it is not necessary
-    var str string
-    fmt.Scan(&str)
 }
 
+```
+
+# write to file
+```
 ```
 it will be create dir with ./logx
 
