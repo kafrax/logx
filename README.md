@@ -16,11 +16,14 @@
 package main
 
 import (
+    "fmt"
 	"github.com/kafrax/logx"
 )
 
 func main(){
     logx.Debugf("module=test |message=%s","logx is a lightweight log to use")
+    var str string
+    fmt.Scan(&str)
 }
 
 ```
