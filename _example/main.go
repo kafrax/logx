@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/kafrax/logx"
+	"fmt"
 )
 
 //func main() {
@@ -40,6 +41,12 @@ import (
 //	//tps is : 703401
 //}
 
+//func main() {
+//	logx.Stackf("test |message=%s", "ahhh")
+//}
+
 func main() {
-	logx.Stackf("test |message=%s", "ahhh")
+	logx.Debugf("test |message=%s", "logx")
+	var str string
+	fmt.Scan(&str)
 }
