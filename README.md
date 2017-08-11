@@ -40,3 +40,5 @@ it will be create dir with ./logx
  - os.stdout output
  - data queue send to kafaka
 
+# @me
+ - kafrax.go@gmial.com

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"logx"
+	"github.com/kafrax/logx"
 )
 
 //func main() {
