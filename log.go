@@ -30,7 +30,6 @@ func init() {
 
 func chaos() {
 	loadConfig()
-
 	y, m, d := time.Now().Date()
 	if logger == nil {
 		logger = &Logger{

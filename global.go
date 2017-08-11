@@ -28,7 +28,7 @@ var pollerinterval = 500
 type level uint8
 
 const (
-	_DEBUG    level = iota+1
+	_DEBUG    level = iota + 1
 	_INFO
 	_WARN
 	_ERR
@@ -50,7 +50,6 @@ func loadConfig() {
 	if err = json.Unmarshal(b, &config); err != nil {
 		return
 	}
-
 	if x := config.Lbucketlen; x != 0 {
 		bucketLen = x
 	}
@@ -63,7 +62,7 @@ func loadConfig() {
 		filePath = x
 	}
 
-	if x := config.Llevel; x !=0 {
+	if x := config.Llevel; x != 0 {
 		levelFlag = level(x)
 	}
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/kafrax/logx"
+	"fmt"
 )
 
 //func main() {
@@ -46,4 +47,6 @@ import (
 
 func main() {
 	logx.Debugf("test |message=%s", "logx")
+	var str string
+	fmt.Scanln(&str)
 }
