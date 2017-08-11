@@ -41,4 +41,4 @@ it will be create dir with ./logx
  - data queue send to kafaka
 
 # @me
- - kafrax.go@gmial.com
+ - kafrax.go@gmail.com
