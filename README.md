@@ -1,6 +1,6 @@
 # logx
- log tool,easy to use,performance,handy,availability
-
+ - log tool,easy to use,performance,handy,availability
+ - version v1.1
 # tps
 ```
  //OutPut write to file
