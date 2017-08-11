@@ -10,10 +10,24 @@
     	//OutPut
     	//tps is : 703401/s
 ```
+
 # simple to use
 ```
+package main
+
+import (
+	"github.com/kafrax/logx"
+)
+
+func main(){
+    logx.Debugf("module=test |message=%s","logx is a lightweight log to use")
+}
 
 ```
+
+# feature
+ - only write to file
+ - at midnight auto do file switch
 
 # future
  - dynamic config

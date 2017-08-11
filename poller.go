@@ -50,6 +50,7 @@ func poller() {
 			}
 			logger.lock.Unlock()
 
+			logger.release(n)
 		case <-tickerPoll.C:
 			logger.lock.Lock()
 			if logger.rotate(func() { logger.fileWriter.Flush() }) {
