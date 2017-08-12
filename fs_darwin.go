@@ -1,6 +1,3 @@
-// +build linux
-// +build darwin
-
 package logx
 
 import (
