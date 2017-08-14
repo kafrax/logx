@@ -67,7 +67,7 @@ func loadConfig() {
 	}
 
 	if x := config.Lmaxsize; x != 0 {
-		maxSize = x
+		maxSize = x * 1024 * 1024
 	}
 
 	if x := config.Lout; x != "" {

@@ -32,11 +32,12 @@ var (
 )
 
 func createLinkFile(oldpath, newpath string) error {
-
+    os.Remove(oldpath)
     st, err := os.Stat(oldpath)
     if err != nil {
         return err
     }
+
 
     linkType := 0
     if st.Mode() == os.ModeDir {

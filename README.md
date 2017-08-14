@@ -45,7 +45,7 @@ func main(){
 ```
 {
     "llevel":1,        //log level,1debug,2info,3warn,4error,5fatal
-    "lmaxsize":102400  //bit
+    "lmaxsize":256     //256mb
     "lout":"stdout",   //file|stdout
     "lbucketlen":1024, //memory cache size
     "lfilename":"logx",//log file name eg. logx2006-01-02.04.05.000.log

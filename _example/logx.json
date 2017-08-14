@@ -1,6 +1,6 @@
 {
   "llevel":1,
-  "lmaxsize":10240000,
+  "lmaxsize":256,
   "lout":"file",
   "lbucketlen":1024,
   "lfilename":"logx",
