@@ -3,12 +3,10 @@ package logx
 import (
 	"sync/atomic"
 	"time"
-	"fmt"
 )
 
 func poller() {
 	atomic.SwapUint32(&logger.look, uint32(coreRunning))
-fmt.Println("---3--")
 	if err := logger.loadCurLogFile(); err != nil {
 		if err = logger.createFile(); err != nil {
 			panic(err)

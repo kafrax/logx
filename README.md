@@ -1,10 +1,10 @@
 # logx
- - log tool,easy to use,performance,handy,availability
+ - log tool,easy to use,high performance,handy,availability
  - version v1.1
 # tps
 ```
- //OutPut write to file
- //tps is : 703401/s
+ //OutPut to file
+ //tps is : 1400000/s
 ```
 # simple to use
 ## install
