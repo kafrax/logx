@@ -29,6 +29,7 @@ func init() {
 }
 
 func chaos() {
+
 	loadConfig()
 	y, m, d := time.Now().Date()
 	if logger == nil {
@@ -204,7 +205,7 @@ func print(buf *bytes.Buffer) {
 	case "file":
 		logger.bucket <- buf
 	case "stdout":
-		fmt.Println(buf.String())
+		fmt.Print(buf.String())
 	case "kafka":
 		//todo send to kafka nsq etc.
 	default:

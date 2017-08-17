@@ -38,6 +38,7 @@ const (
 var levelFlag level = _DEBUG
 
 func loadConfig() {
+
 	b, err := ioutil.ReadFile("logx.json")
 	if err != nil {
 		b, err = ioutil.ReadFile("config.json")
@@ -50,6 +51,7 @@ func loadConfig() {
 	if err = json.Unmarshal(b, &config); err != nil {
 		return
 	}
+
 	if x := config.Lbucketlen; x != 0 {
 		bucketLen = x
 	}
