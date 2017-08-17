@@ -4,13 +4,16 @@
 # tps
 ```
  //OutPut to file
- //tps is : 1400000/s
+ //tps is : 1400000/s on windows
+ //cpu i5-7600 3.5GHZ
+ //ram 8GB
+ //it will be better
 ```
 # simple to use
 ## install
 
 ```
-go get github.com/kafrax/logx
+go get -u github.com/kafrax/logx
 ```
 ## start
 ```
@@ -22,10 +25,10 @@ import (
 
 func main(){
     logx.Debugf("test |message=%s", "logx is a lightweight log to use")
-    logx.Infof("test |message=%s","logx is a lightweight log to use")
-    logx.Errorf("test |message=%s","logx is a lightweight log to use")
-    logx.Warnf("test |message=%s","logx is a lightweight log to use")
-    logx.Fatalf("test |message=%s","logx is a lightweight log to use")
+    logx.Infof("test |message=%s",  "logx is a lightweight log to use")
+    logx.Errorf("test |message=%s", "logx is a lightweight log to use")
+    logx.Warnf("test |message=%s",  "logx is a lightweight log to use")
+    logx.Fatalf("test |message=%s", "logx is a lightweight log to use")
 }
 ```
 ```
@@ -37,10 +40,10 @@ func main(){
 
 ```
 
-# write to file
+#  write to file
 ## config logx.json or config.json
 - let logx.json  or config.json in your project root dir.
-- if there is not config.json,where execute default for logx.
+- will be executed by default , there is no config.json or logx.json yet.
 - notice fileWriter use memory cache ,so must have enough time to do poller to save data to log file.
 ```
 {
@@ -50,7 +53,7 @@ func main(){
     "lbucketlen":1024, //memory cache size
     "lfilename":"logx",//log file name eg. logx2006-01-02.04.05.000.log
     "lfilepath":"./",  //log file path
-    "lpollerinterval": //500 millisecond
+    "lpollerinterval": //500 millisecond flush once
 }
 ```
 ## start
