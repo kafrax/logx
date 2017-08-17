@@ -212,7 +212,7 @@ func print(buf *bytes.Buffer) {
 	}
 }
 
-func Debugf(format string, msg interface{}) {
+func Debugf(format string, msg ... interface{}) {
 	if levelFlag > _DEBUG {
 		return
 	}
@@ -222,7 +222,7 @@ func Debugf(format string, msg interface{}) {
 	print(buf)
 }
 
-func Infof(format string, msg interface{}) {
+func Infof(format string, msg ... interface{}) {
 	if levelFlag > _INFO {
 		return
 	}
@@ -232,7 +232,7 @@ func Infof(format string, msg interface{}) {
 	print(buf)
 }
 
-func Warnf(format string, msg interface{}) {
+func Warnf(format string, msg ... interface{}) {
 	if levelFlag > _WARN {
 		return
 	}
@@ -242,7 +242,7 @@ func Warnf(format string, msg interface{}) {
 	print(buf)
 }
 
-func Errorf(format string, msg interface{}) {
+func Errorf(format string, msg ... interface{}) {
 	if levelFlag > _ERR {
 		return
 	}
@@ -252,7 +252,7 @@ func Errorf(format string, msg interface{}) {
 	print(buf)
 }
 
-func Fatalf(format string, msg interface{}) {
+func Fatalf(format string, msg ... interface{}) {
 	if levelFlag > _DISASTER {
 		return
 	}
@@ -262,7 +262,7 @@ func Fatalf(format string, msg interface{}) {
 	print(buf)
 }
 
-func Stackf(format string, msg interface{}) {
+func Stackf(format string, msg ... interface{}) {
 	s := fmt.Sprintf(format, msg)
 	s += "\n"
 	buf := make([]byte, 1<<20)
@@ -272,57 +272,57 @@ func Stackf(format string, msg interface{}) {
 	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message=" + s)
 }
 
-func Debug(msg interface{}) {
+func Debug(msg ... interface{}) {
 	if levelFlag > _DEBUG {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf("%v", msg) + "\n"))
+	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
 
-func Info(msg interface{}) {
+func Info(msg ... interface{}) {
 	if levelFlag > _INFO {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf("%v", msg) + "\n"))
+	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
 
-func Warn(msg interface{}) {
+func Warn(msg ... interface{}) {
 	if levelFlag > _WARN {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf("%v", msg) + "\n"))
+	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
 
-func Error(msg interface{}) {
+func Error(msg ... interface{}) {
 	if levelFlag > _ERR {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf("%v", msg) + "\n"))
+	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
 
-func Fatal(msg interface{}) {
+func Fatal(msg ... interface{}) {
 	if levelFlag > _DISASTER {
 		return
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
-	buf.Write(s2b(fmt.Sprintf("%v", msg) + "\n"))
+	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
 
-func Stack(msg interface{}) {
+func Stack(msg ... interface{}) {
 	s := fmt.Sprintf("%v", msg)
 	s += "\n"
 	buf := make([]byte, 1<<20)
