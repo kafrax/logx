@@ -324,7 +324,7 @@ func Fatal(msg ... interface{}) {
 }
 
 func Stack(msg ... interface{}) {
-	s := fmt.Sprintf("%v", msg)
+	s := fmt.Sprint(msg)
 	s += "\n"
 	buf := make([]byte, 1<<20)
 	n := runtime.Stack(buf, true)
