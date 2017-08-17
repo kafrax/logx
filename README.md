@@ -6,8 +6,8 @@
  //OutPut to file
  //tps is : 1400000/s on windows
  //cpu i5-7600 3.5GHZ
- //ram 8GB
- //it will be better
+ //8GB
+ //it will be better on better platform
 ```
 # simple to use
 ## install
@@ -44,7 +44,7 @@ func main(){
 ## config logx.json or config.json
 - let logx.json  or config.json in your project root dir.
 - will be executed by default , there is no config.json or logx.json yet.
-- notice fileWriter use memory cache ,so must have enough time to do poller to save data to log file.
+- *notice* fileWriter use memory cache ,so must have enough time to do poller to save data to log file.
 ```
 {
     "llevel":1,        //log level,1debug,2info,3warn,4error,5fatal
