@@ -1,7 +1,7 @@
 {
   "llevel":1,
   "lmaxsize":256,
-  "lout":"stdout",
+  "lout":"file",
   "lbucketlen":1024,
   "lfilename":"logx",
   "lfilepath":"./",
