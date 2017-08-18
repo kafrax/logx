@@ -24,20 +24,19 @@ import (
 )
 
 func main(){
-    logx.Debugf("test |message=%s", "logx is a lightweight log to use")
-    logx.Infof("test |message=%s",  "logx is a lightweight log to use")
-    logx.Errorf("test |message=%s", "logx is a lightweight log to use")
-    logx.Warnf("test |message=%s",  "logx is a lightweight log to use")
-    logx.Fatalf("test |message=%s", "logx is a lightweight log to use")
+    logx.Debugf("LOGX |message=%v |substring=%s", "logx is a lightweight log to use", "debugf test")
+  	logx.Infof("LOGX |message=%s", "logx is a lightweight log to use")
+  	logx.Errorf("LOGX |message=%s", "logx is a lightweight log to use")
+  	logx.Warnf("LOGX |message=%s", "logx is a lightweight log to use")
+  	logx.Fatalf("LOGX |message=%s", "logx is a lightweight log to use")
 }
 ```
 ```
-[DEBU][08-11.16.48.27.297][main.go|main.main|49] message=test |message=logx is a lightweight log to use
-[INFO][08-11.16.48.27.297][main.go|main.main|50] message=test |message=logx is a lightweight log to use
-[ERRO][08-11.16.48.27.297][main.go|main.main|51] message=test |message=logx is a lightweight log to use
-[WARN][08-11.16.48.27.297][main.go|main.main|52] message=test |message=logx is a lightweight log to use
-[FTAL][08-11.16.48.27.297][main.go|main.main|53] message=test |message=logx is a lightweight log to use
-
+[DEBU][08-18.13.34.47.703][main.go|main.main|51] LOGX |message=logx is a lightweight log to use |substring=debugf test
+[INFO][08-18.13.34.47.703][main.go|main.main|52] LOGX |message=logx is a lightweight log to use
+[ERRO][08-18.13.34.47.703][main.go|main.main|53] LOGX |message=logx is a lightweight log to use
+[WARN][08-18.13.34.47.703][main.go|main.main|54] LOGX |message=logx is a lightweight log to use
+[FTAL][08-18.13.34.47.703][main.go|main.main|55] LOGX |message=logx is a lightweight log to use
 ```
 
 #  write to file

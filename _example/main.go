@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/kafrax/logx"
 )
 
@@ -48,11 +47,11 @@ import (
 //}
 
 func main() {
-	logx.Debugf("test |message=%s", "logx is a lightweight log to use")
-	logx.Infof("test |message=%s","logx is a lightweight log to use")
-	logx.Errorf("test |message=%s","logx is a lightweight log to use")
-	logx.Warnf("test |message=%s","logx is a lightweight log to use")
-	logx.Fatalf("test |message=%s","logx is a lightweight log to use")
+	logx.Debugf("LOGX |message=%v |substring=%s", "logx is a lightweight log to use", "debugf test")
+	logx.Infof("LOGX |message=%s", "logx is a lightweight log to use")
+	logx.Errorf("LOGX |message=%s", "logx is a lightweight log to use")
+	logx.Warnf("LOGX |message=%s", "logx is a lightweight log to use")
+	logx.Fatalf("LOGX |message=%s", "logx is a lightweight log to use")
 	var str string
 	fmt.Scanln(&str)
 }
