@@ -47,19 +47,19 @@ import (
 //	logx.Stackf("test |message=%s", "ahhh")
 //}
 
-//func main() {
-//	logx.Debugf("test |message=%s", "logx is a lightweight log to use")
-//	logx.Infof("test |message=%s","logx is a lightweight log to use")
-//	logx.Errorf("test |message=%s","logx is a lightweight log to use")
-//	logx.Warnf("test |message=%s","logx is a lightweight log to use")
-//	logx.Fatalf("test |message=%s","logx is a lightweight log to use")
-//	var str string
-//	fmt.Scanln(&str)
-//}
-
 func main() {
-	logx.Info(0, 1, "test")
-	logx.Info(0, 1, "test")
+	logx.Debugf("test |message=%s", "logx is a lightweight log to use")
+	logx.Infof("test |message=%s","logx is a lightweight log to use")
+	logx.Errorf("test |message=%s","logx is a lightweight log to use")
+	logx.Warnf("test |message=%s","logx is a lightweight log to use")
+	logx.Fatalf("test |message=%s","logx is a lightweight log to use")
 	var str string
 	fmt.Scanln(&str)
 }
+
+//func main() {
+//	logx.Info(0, 1, "test")
+//	logx.Info(0, 1, "test")
+//	var str string
+//	fmt.Scanln(&str)
+//}

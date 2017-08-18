@@ -218,7 +218,7 @@ func Debugf(format string, msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
@@ -228,7 +228,7 @@ func Infof(format string, msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
@@ -238,7 +238,7 @@ func Warnf(format string, msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
@@ -248,7 +248,7 @@ func Errorf(format string, msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
@@ -258,7 +258,7 @@ func Fatalf(format string, msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg) + "\n"))
 	print(buf)
 }
@@ -270,7 +270,7 @@ func Stackf(format string, msg ... interface{}) {
 	n := runtime.Stack(buf, true)
 	s += string(buf[:n])
 	s += "\n"
-	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message=" + s)
+	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] " + s)
 }
 
 func Debug(msg ... interface{}) {
@@ -278,7 +278,7 @@ func Debug(msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
@@ -288,7 +288,7 @@ func Info(msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
@@ -298,7 +298,7 @@ func Warn(msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
@@ -308,7 +308,7 @@ func Error(msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
@@ -318,7 +318,7 @@ func Fatal(msg ... interface{}) {
 		return
 	}
 	buf := bufferPoolGet()
-	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message="))
+	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg)))
 	print(buf)
 }
@@ -330,5 +330,5 @@ func Stack(msg ... interface{}) {
 	n := runtime.Stack(buf, true)
 	s += string(buf[:n])
 	s += "\n"
-	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] message=" + s)
+	fmt.Println("[STAC][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] " + s)
 }
