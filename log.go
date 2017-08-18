@@ -264,7 +264,7 @@ func Fatalf(format string, msg ... interface{}) {
 }
 
 func Stackf(format string, msg ... interface{}) {
-	s := fmt.Sprintf(format, msg)
+	s := fmt.Sprintf(format, msg...)
 	s += "\n"
 	buf := make([]byte, 1<<20)
 	n := runtime.Stack(buf, true)
@@ -279,7 +279,7 @@ func Debug(msg ... interface{}) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
-	buf.Write(s2b(fmt.Sprintln(msg)))
+	buf.Write(s2b(fmt.Sprintln(msg...)))
 	print(buf)
 }
 
@@ -289,7 +289,7 @@ func Info(msg ... interface{}) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
-	buf.Write(s2b(fmt.Sprintln(msg)))
+	buf.Write(s2b(fmt.Sprintln(msg...)))
 	print(buf)
 }
 
@@ -299,7 +299,7 @@ func Warn(msg ... interface{}) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
-	buf.Write(s2b(fmt.Sprintln(msg)))
+	buf.Write(s2b(fmt.Sprintln(msg...)))
 	print(buf)
 }
 
@@ -309,7 +309,7 @@ func Error(msg ... interface{}) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
-	buf.Write(s2b(fmt.Sprintln(msg)))
+	buf.Write(s2b(fmt.Sprintln(msg...)))
 	print(buf)
 }
 
@@ -319,12 +319,12 @@ func Fatal(msg ... interface{}) {
 	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
-	buf.Write(s2b(fmt.Sprintln(msg)))
+	buf.Write(s2b(fmt.Sprintln(msg...)))
 	print(buf)
 }
 
 func Stack(msg ... interface{}) {
-	s := fmt.Sprint(msg)
+	s := fmt.Sprintln(msg...)
 	s += "\n"
 	buf := make([]byte, 1<<20)
 	n := runtime.Stack(buf, true)

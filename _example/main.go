@@ -52,13 +52,7 @@ func main() {
 	logx.Errorf("LOGX |message=%s", "logx is a lightweight log to use")
 	logx.Warnf("LOGX |message=%s", "logx is a lightweight log to use")
 	logx.Fatalf("LOGX |message=%s", "logx is a lightweight log to use")
+	logx.Stackf("test=%s","11111")
 	var str string
 	fmt.Scanln(&str)
 }
-
-//func main() {
-//	logx.Info(0, 1, "test")
-//	logx.Info(0, 1, "test")
-//	var str string
-//	fmt.Scanln(&str)
-//}
