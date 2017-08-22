@@ -112,6 +112,8 @@ func (l *Logger) sync() {
 	}
 }
 
+const fileMaxDelta = 100
+
 func (l *Logger) rotate(do func()) bool {
 	if !l.lookRunning() {
 		return false
@@ -119,7 +121,7 @@ func (l *Logger) rotate(do func()) bool {
 
 	y, m, d := time.Now().Date()
 	timestamp := y*10000 + int(m)*100 + d*1
-	if l.fileActualSize <= l.fileMaxSize || timestamp < l.timestamp {
+	if l.fileActualSize <= l.fileMaxSize-fileMaxDelta || timestamp < l.timestamp {
 		return false
 	}
 	do()
