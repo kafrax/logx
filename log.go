@@ -163,7 +163,7 @@ func (l *Logger) signalHandler() {
 		select {
 		case sig := <-sigChan:
 			l.closeSignal <- "close"
-			fmt.Println("receive os signal is ", sig)
+			fmt.Println("LOGX receive os signal is ", sig)
 			l.fileWriter.Flush()
 			closeFile(l.file)
 			atomic.SwapUint32(&l.look, uint32(coreDead))
