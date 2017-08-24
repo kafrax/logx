@@ -31,7 +31,6 @@ func isLinkFile(filename string) (name string, ok bool) {
     } else {
         return
     }
-
     return
 }
 

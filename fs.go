@@ -12,7 +12,6 @@ func openFile(name string) (file *os.File, err error) {
         return
     }
     //syscall.Syscall(syscall.O_SYNC, file.Fd(), 0, 0)
-
     return
 }
 

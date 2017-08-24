@@ -8,9 +8,7 @@ import (
 )
 
 //pool for logMessage logMsg
-type logMsg struct {
-	B []byte
-}
+type logMsg struct { B []byte }
 
 //no bb
 var logMsgFree = sync.Pool{

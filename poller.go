@@ -14,9 +14,7 @@ func poller() {
 			panic(err)
 		}
 	}
-
 	go logger.signalHandler()
-
 	ticker := time.NewTicker(time.Millisecond * time.Duration(pollerinterval))
 	now := time.Now()
 	next := now.Add(time.Hour * 24)
@@ -26,9 +24,7 @@ func poller() {
 		next.Day(),
 		0, 0, 0, 0,
 		next.Location())
-
 	tickerPoll := time.NewTicker(next.Sub(now))
-
 	for {
 		select {
 		case <-logger.closeSignal:
@@ -36,9 +32,7 @@ func poller() {
 			tickerPoll.Stop()
 
 		case <-ticker.C:
-			if logger.fileWriter.Buffered() > 0 {
-				logger.sync()
-			}
+			if logger.fileWriter.Buffered() > 0 { logger.sync() }
 
 		case n := <-logger.bucket:
 			logger.fileWriter.Write(n.Bytes())
