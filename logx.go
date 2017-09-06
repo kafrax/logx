@@ -98,7 +98,7 @@ func (l *Logger) rotate(do func()) bool {
 	if !l.lookRunning() { return false }
 	y, m, d := time.Now().Date()
 	timestamp := y*10000 + int(m)*100 + d*1
-	if l.fileActualSize <= l.fileMaxSize-fileMaxDelta || timestamp < l.timestamp {
+	if l.fileActualSize <= l.fileMaxSize-fileMaxDelta && timestamp <= l.timestamp {
 		return false
 	}
 	do()
