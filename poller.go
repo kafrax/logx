@@ -46,7 +46,7 @@ DONE:
 			logger.lock.Unlock()
 
 			logger.release(n)
-		case n:=<-tickerPoll.C:
+		case <-tickerPoll.C:
 			logger.lock.Lock()
 			if logger.rotate(func() { logger.fileWriter.Flush() }) {
 				logger.fileWriter.Reset(logger.file)
