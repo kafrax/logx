@@ -25,12 +25,13 @@ func poller() {
 		0, 0, 0, 0,
 		next.Location())
 	tickerPoll := time.NewTicker(next.Sub(now))
+DONE:
 	for {
 		select {
 		case <-logger.closeSignal:
 			ticker.Stop()
 			tickerPoll.Stop()
-
+			break DONE
 		case <-ticker.C:
 			if logger.fileWriter.Buffered() > 0 { logger.sync() }
 
@@ -45,11 +46,12 @@ func poller() {
 			logger.lock.Unlock()
 
 			logger.release(n)
-		case <-tickerPoll.C:
+		case n:=<-tickerPoll.C:
 			logger.lock.Lock()
 			if logger.rotate(func() { logger.fileWriter.Flush() }) {
 				logger.fileWriter.Reset(logger.file)
 			}
+			logger.lock.Unlock()
 			tickerPoll = time.NewTicker(time.Hour * 24)
 		}
 	}
