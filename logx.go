@@ -94,14 +94,14 @@ func (l *Logger) sync() {
 
 const fileMaxDelta = 100
 
-func (l *Logger) rotate(do func()) bool {
+func (l *Logger) rotate() bool {
 	if !l.lookRunning() { return false }
 	y, m, d := time.Now().Date()
 	timestamp := y*10000 + int(m)*100 + d*1
 	if l.fileActualSize <= l.fileMaxSize-fileMaxDelta && timestamp <= l.timestamp {
 		return false
 	}
-	do()
+	l.fileWriter.Flush()
 	closeFile(l.file)
 	if err := l.createFile(); err != nil { return false }
 	return true
