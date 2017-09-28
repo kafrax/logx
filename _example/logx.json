@@ -5,5 +5,5 @@
   "lbucketlen":1024,
   "lfilename":"logx",
   "lfilepath":"./",
-  "lpollerinterval":500
+  "lpollerinterval":5000
 }
