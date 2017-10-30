@@ -26,8 +26,8 @@ var filePath  string = getCurrentDirectory()
 var levelFlag level  = _DEBUG
 var pollerinterval   = 500
 
-type level uint8
-type coreStatus uint32
+type  level      =uint8
+type  coreStatus =uint32
 
 func loadConfig() {
 	b, err := ioutil.ReadFile("logx.json")

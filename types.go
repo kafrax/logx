@@ -8,6 +8,11 @@ import (
 	"sync"
 )
 
+type Hook interface {
+	Fire(writer *bufio.Writer)
+	Level(level)
+}
+
 type Logger struct {
 	look           uint32 //monitor run state with block stop or running
 	link           string

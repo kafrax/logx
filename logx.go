@@ -170,7 +170,8 @@ func print(buf *bytes.Buffer) {
 	switch out {
 	case "file": logger.bucket <- buf
 	case "stdout": fmt.Print(buf.String())
-	case "kafka": //todo send to kafka nsq etc.
+	case "kafka": //todo send to kafka etc.
+	case "nsq": //todo send to kafka nsq etc.
 	default: fmt.Println(buf.String())
 	}
 }
