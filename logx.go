@@ -22,7 +22,9 @@ var logger *Logger
 
 func init() {
 	chaos()
-	if out == "file" { go poller() }
+	if out == "file" {
+		go poller()
+	}
 }
 
 func chaos() {
@@ -32,6 +34,7 @@ func chaos() {
 		logger = &Logger{
 			look:        uint32(coreDead),
 			fileName:    fileName,
+			fileBufSize: bufSize,
 			path:        filepath.Join(filePath, fileName),
 			timestamp:   y*10000 + int(m)*100 + d*1,
 			fileMaxSize: maxSize,
@@ -54,7 +57,9 @@ func (l *Logger) loadCurLogFile() error {
 		return err
 	}
 	info, err := os.Stat(l.fileName)
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 	sp := strings.Split(actFileName, ".")
 	t, err := time.Parse("2006-01-02", sp[1])
 	if err != nil {
@@ -65,13 +70,15 @@ func (l *Logger) loadCurLogFile() error {
 	l.timestamp = y*10000 + int(m)*100 + d*1
 	l.file = f
 	l.fileActualSize = int(info.Size())
-	l.fileWriter = bufio.NewWriterSize(f, l.fileMaxSize)
+	l.fileWriter = bufio.NewWriterSize(f, l.fileBufSize)
 	return nil
 }
 
 func (l *Logger) createFile() (err error) {
 	if !pathIsExist(l.path) {
-		if err = os.MkdirAll(l.path, os.ModePerm); err != nil { return }
+		if err = os.MkdirAll(l.path, os.ModePerm); err != nil {
+			return
+		}
 	}
 	now := time.Now()
 	y, m, d := now.Date()
@@ -80,7 +87,9 @@ func (l *Logger) createFile() (err error) {
 		l.path,
 		filepath.Base(os.Args[0])+"."+now.Format("2006-01-02.15.04.05.000")+".log")
 	f, err := openFile(l.fileName)
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 	l.file = f
 	l.fileActualSize = 0
 	l.fileWriter = bufio.NewWriterSize(f, l.fileMaxSize)
@@ -89,13 +98,17 @@ func (l *Logger) createFile() (err error) {
 }
 
 func (l *Logger) sync() {
-	if l.lookRunning() { l.fileWriter.Flush() }
+	if l.lookRunning() {
+		l.fileWriter.Flush()
+	}
 }
 
 const fileMaxDelta = 100
 
 func (l *Logger) rotate() bool {
-	if !l.lookRunning() { return false }
+	if !l.lookRunning() {
+		return false
+	}
 	y, m, d := time.Now().Date()
 	timestamp := y*10000 + int(m)*100 + d*1
 	if l.fileActualSize <= l.fileMaxSize-fileMaxDelta && timestamp <= l.timestamp {
@@ -103,22 +116,30 @@ func (l *Logger) rotate() bool {
 	}
 	l.fileWriter.Flush()
 	closeFile(l.file)
-	if err := l.createFile(); err != nil { return false }
+	if err := l.createFile(); err != nil {
+		return false
+	}
 	return true
 }
 
 func (l *Logger) lookRunning() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreRunning) { return true }
+	if atomic.LoadUint32(&l.look) == uint32(coreRunning) {
+		return true
+	}
 	return false
 }
 
 func (l *Logger) lookDead() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreDead) { return true }
+	if atomic.LoadUint32(&l.look) == uint32(coreDead) {
+		return true
+	}
 	return false
 }
 
 func (l *Logger) lookBlock() bool {
-	if atomic.LoadUint32(&l.look) == uint32(coreBlock) { return true }
+	if atomic.LoadUint32(&l.look) == uint32(coreBlock) {
+		return true
+	}
 	return false
 }
 
@@ -168,16 +189,21 @@ func caller() string {
 
 func print(buf *bytes.Buffer) {
 	switch out {
-	case "file": logger.bucket <- buf
-	case "stdout": fmt.Print(buf.String())
+	case "file":
+		logger.bucket <- buf
+	case "stdout":
+		fmt.Print(buf.String())
 	case "kafka": //todo send to kafka etc.
 	case "nsq": //todo send to kafka nsq etc.
-	default: fmt.Println(buf.String())
+	default:
+		fmt.Println(buf.String())
 	}
 }
 
 func Debugf(format string, msg ... interface{}) {
-	if levelFlag > _DEBUG { return }
+	if levelFlag > _DEBUG {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg...) + "\n"))
@@ -185,7 +211,9 @@ func Debugf(format string, msg ... interface{}) {
 }
 
 func Infof(format string, msg ... interface{}) {
-	if levelFlag > _INFO { return }
+	if levelFlag > _INFO {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg...) + "\n"))
@@ -193,7 +221,9 @@ func Infof(format string, msg ... interface{}) {
 }
 
 func Warnf(format string, msg ... interface{}) {
-	if levelFlag > _WARN { return }
+	if levelFlag > _WARN {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg...) + "\n"))
@@ -201,7 +231,9 @@ func Warnf(format string, msg ... interface{}) {
 }
 
 func Errorf(format string, msg ... interface{}) {
-	if levelFlag > _ERR { return }
+	if levelFlag > _ERR {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg...) + "\n"))
@@ -209,7 +241,9 @@ func Errorf(format string, msg ... interface{}) {
 }
 
 func Fatalf(format string, msg ... interface{}) {
-	if levelFlag > _DISASTER { return }
+	if levelFlag > _DISASTER {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintf(format, msg...) + "\n"))
@@ -227,7 +261,9 @@ func Stackf(format string, msg ... interface{}) {
 }
 
 func Debug(msg ... interface{}) {
-	if levelFlag > _DEBUG { return }
+	if levelFlag > _DEBUG {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[DEBU][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg...)))
@@ -235,7 +271,9 @@ func Debug(msg ... interface{}) {
 }
 
 func Info(msg ... interface{}) {
-	if levelFlag > _INFO { return }
+	if levelFlag > _INFO {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[INFO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg...)))
@@ -243,7 +281,9 @@ func Info(msg ... interface{}) {
 }
 
 func Warn(msg ... interface{}) {
-	if levelFlag > _WARN { return }
+	if levelFlag > _WARN {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[WARN][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg...)))
@@ -251,7 +291,9 @@ func Warn(msg ... interface{}) {
 }
 
 func Error(msg ... interface{}) {
-	if levelFlag > _ERR { return }
+	if levelFlag > _ERR {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[ERRO][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg...)))
@@ -259,7 +301,9 @@ func Error(msg ... interface{}) {
 }
 
 func Fatal(msg ... interface{}) {
-	if levelFlag > _DISASTER { return }
+	if levelFlag > _DISASTER {
+		return
+	}
 	buf := bufferPoolGet()
 	buf.Write(s2b("[FTAL][" + time.Now().Format("01-02.15.04.05.000") + "]" + "[" + caller() + "] "))
 	buf.Write(s2b(fmt.Sprintln(msg...)))

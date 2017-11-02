@@ -7,7 +7,7 @@ import (
 )
 
 func openFile(name string) (file *os.File, err error) {
-    file, err = os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_APPEND|os.O_SYNC, os.ModePerm)
+    file, err = os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_APPEND|os.O_SYNC, 0777)
     if err != nil {
         return
     }

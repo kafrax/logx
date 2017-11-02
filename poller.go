@@ -31,7 +31,9 @@ DONE:
 			ticker.Stop()
 			break DONE
 		case <-ticker.C:
-			if logger.fileWriter.Buffered() > 0 { logger.sync() }
+			if logger.fileWriter.Buffered() > 0 {
+				logger.sync()
+			}
 		case n := <-logger.bucket:
 			logger.fileWriter.Write(n.Bytes())
 			logger.fileActualSize += n.Len()

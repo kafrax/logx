@@ -22,6 +22,7 @@ type Logger struct {
 	fileWriter     *bufio.Writer
 	timestamp      int
 	fileMaxSize    int
+	fileBufSize    int
 	fileActualSize int
 	bucket         chan *bytes.Buffer
 	bucketFlushLen int
@@ -32,8 +33,9 @@ type Logger struct {
 }
 
 type config struct {
-	Llevel          uint8 `json:"llevel"`
+	Llevel          uint8  `json:"llevel"`
 	Lmaxsize        int    `json:"lmaxsize"`
+	Lbufsize        int    `json:"lbufsize"`
 	Lout            string `json:"lout"`
 	Lbucketlen      int    `json:"lbucketlen"`
 	Lfilename       string `json:"lfilename"`
