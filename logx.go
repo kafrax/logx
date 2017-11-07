@@ -92,7 +92,7 @@ func (l *Logger) createFile() (err error) {
 	}
 	l.file = f
 	l.fileActualSize = 0
-	l.fileWriter = bufio.NewWriterSize(f, l.fileMaxSize)
+	l.fileWriter = bufio.NewWriterSize(f, l.fileBufSize)
 	l.link = filepath.Join(l.path, fileName+".log")
 	return createLinkFile(l.fileName, l.link)
 }
