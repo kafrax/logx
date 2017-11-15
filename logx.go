@@ -145,7 +145,8 @@ func (l *Logger) lookBlock() bool {
 
 func (l *Logger) signalHandler() {
 	var sigChan = make(chan os.Signal)
-	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGHUP, syscall.SIGQUIT)
+	//syscall.SIGHUP
+	signal.Notify(sigChan, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT)
 	for {
 		select {
 		case sig := <-sigChan:
